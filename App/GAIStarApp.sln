@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAIStarApp", "GAIStarApp\GAIStarApp.csproj", "{1CD2AAB5-5C12-4D78-BA62-0BECDDEF3A81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAIStarApp.Tests", "UnitTestProject\GAIStarApp.Tests.csproj", "{B3019CC9-9496-42AC-AB43-A15DB2F506B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CD2AAB5-5C12-4D78-BA62-0BECDDEF3A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD2AAB5-5C12-4D78-BA62-0BECDDEF3A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD2AAB5-5C12-4D78-BA62-0BECDDEF3A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD2AAB5-5C12-4D78-BA62-0BECDDEF3A81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3019CC9-9496-42AC-AB43-A15DB2F506B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3019CC9-9496-42AC-AB43-A15DB2F506B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3019CC9-9496-42AC-AB43-A15DB2F506B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3019CC9-9496-42AC-AB43-A15DB2F506B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {296502BA-30EF-40AB-ABB4-2EE3EBCEED3A}
+	EndGlobalSection
+EndGlobal

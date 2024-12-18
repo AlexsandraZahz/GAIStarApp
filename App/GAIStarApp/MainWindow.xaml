@@ -1,0 +1,73 @@
+﻿<Window x:Class="GAIStarApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GAI Star" Height="600" Width="450"
+        WindowStartupLocation="CenterScreen"
+        Background="#B6ADAF">
+    <Window.Resources>
+        <!-- Анимация для текста слогана -->
+        <Storyboard x:Key="ShadowAnimation">
+            <DoubleAnimation Storyboard.TargetName="SloganTextBlock"
+                             Storyboard.TargetProperty="(TextBlock.Opacity)"
+                             From="1" To="0" Duration="0:0:1"/>
+            <DoubleAnimation Storyboard.TargetName="SloganTextBlock"
+                             Storyboard.TargetProperty="(TextBlock.Effect).(DropShadowEffect.ShadowDepth)"
+                             From="0" To="20" Duration="0:0:1"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Логотип приложения -->
+        <Image Source="Resources/GAIStarLogo.png" 
+               Width="217" Height="183" 
+               HorizontalAlignment="Left" VerticalAlignment="Top" 
+               Margin="10,10,0,0"/>
+
+        <!-- Слоган приложения -->
+        <Border Background="#BDE3FF" CornerRadius="10" Padding="20" 
+                HorizontalAlignment="Center" VerticalAlignment="Top" 
+                Margin="0,292,0,0"
+                Width="420" Height="60">
+            <TextBlock x:Name="SloganTextBlock" 
+                       Text="ГАИ Star — безопасность на дорогах, сияющая как звезда!" 
+                       FontSize="13" FontWeight="Bold" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Foreground="#333"
+                       TextAlignment="Center">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="0.5" BlurRadius="10"/>
+                </TextBlock.Effect>
+                <TextBlock.Triggers>
+                    <EventTrigger RoutedEvent="TextBlock.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource ShadowAnimation}"/>
+                    </EventTrigger>
+                </TextBlock.Triggers>
+            </TextBlock>
+        </Border>
+
+        <!-- Кнопка "Авторизоваться" -->
+        <Button Content="Авторизоваться" 
+                HorizontalAlignment="Center" VerticalAlignment="Top" 
+                Margin="0,435,0,0" 
+                Click="Button_Authorize_Click"
+                Background="#76A1A7"
+                Foreground="White"
+                BorderBrush="#76A1A7"
+                BorderThickness="2"
+                Width="200"
+                Height="60"
+                FontSize="14"
+                Cursor="Hand">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <!-- Копирайт -->
+        <TextBlock Text="© 2024 GAI Star. Все права защищены." HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" FontSize="12" Foreground="#888"/>
+    </Grid>
+</Window>
