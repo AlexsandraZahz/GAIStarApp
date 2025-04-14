@@ -1,0 +1,123 @@
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+namespace LibraryManagement
+{
+    public static class DatabaseHelper
+    {
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementDB"].ConnectionString;
+
+        /// <summary>
+        /// Выполняет SQL-запрос и возвращает результат в виде DataTable.
+        /// </summary>
+        public static DataTable ExecuteQuery(string query)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+                        return dataTable;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при выполнении запроса: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Выполняет SQL-запрос без возврата данных (INSERT, UPDATE, DELETE).
+        /// </summary>
+        public static void ExecuteNonQuery(string query)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при выполнении запроса: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Получает список всех книг из базы данных.
+        /// </summary>
+        public static DataTable GetAllBooks()
+        {
+            string query = "SELECT * FROM Books";
+            return ExecuteQuery(query);
+        }
+
+        /// <summary>
+        /// Добавляет новую книгу в базу данных.
+        /// </summary>
+        public static void AddBook(string title, string authors, string libraryCode, int yearPublished, string publisher, int totalCopies, int availableCopies)
+        {
+            string query = $@"
+                INSERT INTO Books (Title, Authors, LibraryCode, YearPublished, Publisher, TotalCopies, AvailableCopies)
+                VALUES ('{title}', '{authors}', '{libraryCode}', {yearPublished}, '{publisher}', {totalCopies}, {availableCopies})";
+            ExecuteNonQuery(query);
+        }
+
+        /// <summary>
+        /// Обновляет информацию о книге в базе данных.
+        /// </summary>
+        public static void UpdateBook(int bookID, string title, string authors, string libraryCode, int yearPublished, string publisher, int totalCopies, int availableCopies)
+        {
+            string query = $@"
+                UPDATE Books
+                SET Title = '{title}',
+                    Authors = '{authors}',
+                    LibraryCode = '{libraryCode}',
+                    YearPublished = {yearPublished},
+                    Publisher = '{publisher}',
+                    TotalCopies = {totalCopies},
+                    AvailableCopies = {availableCopies}
+                WHERE BookID = {bookID}";
+            ExecuteNonQuery(query);
+        }
+
+        /// <summary>
+        /// Ищет книги по названию или автору.
+        /// </summary>
+        public static DataTable SearchBooks(string searchTerm)
+        {
+            string query = $@"
+                SELECT * FROM Books
+                WHERE Title LIKE '%{searchTerm}%' OR Authors LIKE '%{searchTerm}%'";
+            return ExecuteQuery(query);
+        }
+
+        /// <summary>
+        /// Получает список книг, находящихся на руках у читателей.
+        /// </summary>
+        public static DataTable GetLoanedBooks()
+        {
+            string query = @"
+                SELECT b.Title AS Title, r.LastName + ' ' + r.FirstName AS ReaderName, l.IssueDate, l.ReturnDate
+                FROM Loans l
+                JOIN BookInstances bi ON l.InstanceID = bi.InstanceID
+                JOIN Books b ON bi.BookID = b.BookID
+                JOIN Readers r ON l.ReaderID = r.ReaderID
+                WHERE l.ActualReturnDate IS NULL";
+            return ExecuteQuery(query);
+        }
+    }
+}
