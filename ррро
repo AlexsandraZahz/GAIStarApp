@@ -1,0 +1,114 @@
+using System;
+using System.Data;
+using System.Windows.Forms;
+using LibraryManagement.Models;
+
+namespace LibraryManagement
+{
+    public partial class MainForm : Form
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+            LoadBooks(); // Загрузка книг при запуске формы
+        }
+
+        private void LoadBooks()
+        {
+            DataTable booksTable = DatabaseHelper.GetAllBooks();
+            lstBooks.DataSource = booksTable;
+            lstBooks.DisplayMember = "Title";
+        }
+
+        private void btnAddBook_Click(object sender, EventArgs e)
+        {
+            // Открываем форму добавления книги
+            AddEditBookForm addEditForm = new AddEditBookForm();
+            if (addEditForm.ShowDialog() == DialogResult.OK)
+            {
+                // Добавляем книгу в базу данных
+                DatabaseHelper.AddBook(
+                    addEditForm.Book.Title,
+                    addEditForm.Book.Authors,
+                    addEditForm.Book.LibraryCode,
+                    addEditForm.Book.YearPublished,
+                    addEditForm.Book.Publisher,
+                    addEditForm.Book.TotalCopies,
+                    addEditForm.Book.AvailableCopies
+                );
+                LoadBooks(); // Обновляем список книг
+            }
+        }
+
+        private void btnEditBook_Click(object sender, EventArgs e)
+        {
+            if (lstBooks.SelectedItem != null)
+            {
+                DataRowView selectedBookRow = (DataRowView)lstBooks.SelectedItem;
+
+                // Создаем объект книги для редактирования
+                Models.Book selectedBook = new Models.Book
+                {
+                    BookID = Convert.ToInt32(selectedBookRow["BookID"]),
+                    Title = selectedBookRow["Title"].ToString(),
+                    Authors = selectedBookRow["Authors"].ToString(),
+                    LibraryCode = selectedBookRow["LibraryCode"].ToString(),
+                    YearPublished = Convert.ToInt32(selectedBookRow["YearPublished"]),
+                    Publisher = selectedBookRow["Publisher"].ToString(),
+                    TotalCopies = Convert.ToInt32(selectedBookRow["TotalCopies"]),
+                    AvailableCopies = Convert.ToInt32(selectedBookRow["AvailableCopies"])
+                };
+
+                // Открываем форму редактирования книги
+                AddEditBookForm editForm = new AddEditBookForm();
+                editForm.Book = selectedBook;
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Обновляем книгу в базе данных
+                    DatabaseHelper.UpdateBook(
+                        editForm.Book.BookID,
+                        editForm.Book.Title,
+                        editForm.Book.Authors,
+                        editForm.Book.LibraryCode,
+                        editForm.Book.YearPublished,
+                        editForm.Book.Publisher,
+                        editForm.Book.TotalCopies,
+                        editForm.Book.AvailableCopies
+                    );
+                    LoadBooks(); // Обновляем список книг
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите книгу для редактирования.");
+            }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string searchTerm = txtSearch.Text.Trim();
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Ищем книги по ключевому слову
+                DataTable searchResult = DatabaseHelper.SearchBooks(searchTerm);
+                lstBooks.DataSource = searchResult;
+                lstBooks.DisplayMember = "Title";
+            }
+            else
+            {
+                MessageBox.Show("Введите текст для поиска.");
+            }
+        }
+
+        private void btnLoanedBooks_Click(object sender, EventArgs e)
+        {
+            // Получаем список выданных книг
+            DataTable loansTable = DatabaseHelper.GetLoanedBooks();
+
+            // Открываем форму списка выданных книг
+            LoanedBooksForm loanedForm = new LoanedBooksForm();
+            loanedForm.SetDataSource(loansTable);
+            loanedForm.ShowDialog();
+        }
+    }
+}
