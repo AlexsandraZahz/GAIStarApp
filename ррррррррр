@@ -1,0 +1,41 @@
+using System;
+using System.Data;
+using System.Windows.Forms;
+
+namespace LibraryManagement
+{
+    public partial class LoanedBooksForm : Form
+    {
+        public LoanedBooksForm()
+        {
+            InitializeComponent();
+            LoadData(); // Загружаем данные при открытии формы
+        }
+
+        /// <summary>
+        /// Метод для загрузки данных о выданных книгах из базы данных.
+        /// </summary>
+        private void LoadData()
+        {
+            try
+            {
+                // Получаем данные из базы данных
+                DataTable loansTable = DatabaseHelper.GetLoanedBooks();
+
+                // Проверяем, есть ли данные
+                if (loansTable.Rows.Count > 0)
+                {
+                    dgvLoanedBooks.DataSource = loansTable; // Устанавливаем источник данных
+                }
+                else
+                {
+                    MessageBox.Show("Нет данных о выданных книгах.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при загрузке данных: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}
