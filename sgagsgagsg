@@ -1,0 +1,35 @@
+namespace LibraryManagement
+{
+    partial class LoanedBooksForm
+    {
+        private System.ComponentModel.IContainer components = null;
+        private DataGridView dgvLoanedBooks;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            this.dgvLoanedBooks = new DataGridView();
+
+            // DataGridView: Список выданных книг
+            this.dgvLoanedBooks.Location = new System.Drawing.Point(12, 12);
+            this.dgvLoanedBooks.Size = new System.Drawing.Size(600, 300);
+            this.dgvLoanedBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvLoanedBooks.ReadOnly = true;
+
+            // Основные настройки формы
+            this.ClientSize = new System.Drawing.Size(624, 324);
+            this.Controls.Add(this.dgvLoanedBooks);
+            this.Name = "LoanedBooksForm";
+            this.Text = "Список выданных книг";
+            this.ResumeLayout(false);
+        }
+    }
+}
