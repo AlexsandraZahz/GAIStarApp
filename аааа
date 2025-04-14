@@ -1,0 +1,41 @@
+namespace LibraryManagement
+{
+    partial class LoanedBooksForm
+    {
+        private System.ComponentModel.IContainer components = null;
+        private DataGridView dgvLoanedBooks;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private void InitializeComponent()
+        {
+            this.dgvLoanedBooks = new System.Windows.Forms.DataGridView();
+            this.SuspendLayout();
+
+            // DataGridView: Список выданных книг
+            this.dgvLoanedBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLoanedBooks.Location = new System.Drawing.Point(12, 12);
+            this.dgvLoanedBooks.Name = "dgvLoanedBooks";
+            this.dgvLoanedBooks.Size = new System.Drawing.Size(600, 300);
+            this.dgvLoanedBooks.TabIndex = 0;
+            this.dgvLoanedBooks.ReadOnly = true; // Запрещаем редактирование данных
+            this.dgvLoanedBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // Автоматическое масштабирование столбцов
+
+            // Основные настройки формы
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(624, 324);
+            this.Controls.Add(this.dgvLoanedBooks);
+            this.Name = "LoanedBooksForm";
+            this.Text = "Список выданных книг";
+            this.ResumeLayout(false);
+        }
+    }
+}
