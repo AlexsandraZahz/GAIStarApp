@@ -1,0 +1,19 @@
+using System;
+using System.Data;
+using System.Windows.Forms;
+
+namespace LibraryManagement
+{
+    public partial class LoanedBooksForm : Form
+    {
+        public LoanedBooksForm()
+        {
+            InitializeComponent();
+        }
+
+        public void SetDataSource(DataTable dataSource)
+        {
+            dgvLoanedBooks.DataSource = dataSource; // Устанавливаем источник данных для DataGridView
+        }
+    }
+}
