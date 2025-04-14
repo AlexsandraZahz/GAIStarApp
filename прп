@@ -1,0 +1,66 @@
+using System;
+using System.Windows.Forms;
+
+namespace LibraryManagement
+{
+    public partial class AddEditBookForm : Form
+    {
+        public Models.Book Book { get; set; } // Свойство для хранения данных книги
+
+        public AddEditBookForm()
+        {
+            InitializeComponent();
+        }
+
+        private void AddEditBookForm_Load(object sender, EventArgs e)
+        {
+            if (Book != null)
+            {
+                // Если форма открыта для редактирования, заполняем поля данными книги
+                txtTitle.Text = Book.Title;
+                txtAuthors.Text = Book.Authors;
+                txtLibraryCode.Text = Book.LibraryCode;
+                nudYearPublished.Value = Book.YearPublished;
+                txtPublisher.Text = Book.Publisher;
+                nudTotalCopies.Value = Book.TotalCopies;
+                nudAvailableCopies.Value = Book.AvailableCopies;
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            // Проверяем, что все обязательные поля заполнены
+            if (string.IsNullOrWhiteSpace(txtTitle.Text) ||
+                string.IsNullOrWhiteSpace(txtAuthors.Text) ||
+                string.IsNullOrWhiteSpace(txtLibraryCode.Text) ||
+                string.IsNullOrWhiteSpace(txtPublisher.Text))
+            {
+                MessageBox.Show("Пожалуйста, заполните все обязательные поля.");
+                return;
+            }
+
+            // Создаем или обновляем объект книги
+            if (Book == null)
+            {
+                Book = new Models.Book();
+            }
+
+            Book.Title = txtTitle.Text;
+            Book.Authors = txtAuthors.Text;
+            Book.LibraryCode = txtLibraryCode.Text;
+            Book.YearPublished = Convert.ToInt32(nudYearPublished.Value);
+            Book.Publisher = txtPublisher.Text;
+            Book.TotalCopies = Convert.ToInt32(nudTotalCopies.Value);
+            Book.AvailableCopies = Convert.ToInt32(nudAvailableCopies.Value);
+
+            this.DialogResult = DialogResult.OK; // Устанавливаем результат диалога
+            this.Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel; // Устанавливаем результат диалога
+            this.Close();
+        }
+    }
+}
