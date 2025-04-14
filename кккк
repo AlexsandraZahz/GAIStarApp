@@ -1,0 +1,55 @@
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+namespace LibraryManagement
+{
+    public static class DatabaseHelper
+    {
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["LibraryManagementDB"].ConnectionString;
+
+        /// <summary>
+        /// Выполняет SQL-запрос и возвращает результат в виде DataTable.
+        /// </summary>
+        public static DataTable ExecuteQuery(string query)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+                        return dataTable;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при выполнении запроса: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Получает список книг, находящихся на руках у читателей.
+        /// </summary>
+        public static DataTable GetLoanedBooks()
+        {
+            string query = @"
+                SELECT b.Title AS Title, 
+                       r.LastName + ' ' + r.FirstName AS ReaderName, 
+                       l.IssueDate, 
+                       l.ReturnDate
+                FROM Loans l
+                JOIN BookInstances bi ON l.InstanceID = bi.InstanceID
+                JOIN Books b ON bi.BookID = b.BookID
+                JOIN Readers r ON l.ReaderID = r.ReaderID
+                WHERE l.ActualReturnDate IS NULL"; // Только книги, которые еще не возвращены
+            return ExecuteQuery(query);
+        }
+    }
+}
